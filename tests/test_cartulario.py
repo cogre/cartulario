@@ -59,6 +59,16 @@ class Bot(unittest.TestCase):
         self.assertIn("| x.com | Vídeo de ação", index)
         self.assertIn("note: ritmo bom", index)
 
+    def test_page_is_rebuilt_with_what_the_index_says(self):
+        self.run_updates([msg("https://x.com/a/status/1 ritmo bom | com barra"), msg("https://youtu.be/abc", update=2)])
+        items = c.entries(self.dir.name)
+        self.assertEqual([i["origin"] for i in items], ["youtube.com", "x.com"])          # newest first
+        self.assertEqual(items[1]["note"], "ritmo bom | com barra")
+        html = open(os.path.join(self.dir.name, "index.html"), encoding="utf-8").read()
+        self.assertIn("Vídeo de ação", html)
+        self.assertNotIn("http://", html.split("<script>")[0])                            # nothing loaded from outside
+        self.assertEqual(c.page(self.dir.name), 2)
+
     def test_strangers_and_groups_are_ignored_silently(self):
         n = self.run_updates([msg("https://x.com/a/status/1", user=99), msg("https://x.com/a/status/2", kind="group", update=2)])
         self.assertEqual((n, self.sent), (0, []))

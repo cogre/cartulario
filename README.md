@@ -67,10 +67,15 @@ videos/
   2026-10/
     2026-10-11 Author - Title of the video [id].mp4
   INDEX.txt
+  index.html
 ```
 
 `INDEX.txt` is plain text, one block per video: when it was saved, where from, title, file, link
 and your note. Years from now it still says where each file came from, even if the link is dead.
+
+`index.html` is rebuilt after every download. Open it in a browser to search what you saved and
+watch it right there. It is one self-contained file that plays the videos from the folder; nothing
+is loaded from the internet.
 
 Set `CARTULARIO_FOLDER` in `.env` to use another folder.
 
